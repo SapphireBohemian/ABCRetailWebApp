@@ -1,0 +1,15 @@
+﻿@model ABCRetailWebApp.Models.BlobUploadViewModel
+
+<h2>Upload New Blob</h2>
+
+<form asp-action="Upload" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="File">Select file to upload:</label>
+        <input asp-for="File" class="form-control" type="file" />
+        <span asp-validation-for="File" class="text-danger"></span>
+    </div>
+
+    <input type="hidden" asp-for="ContainerName" value="@Model.ContainerName" />
+
+    <button type="submit" class="btn btn-primary">Upload</button>
+</form>

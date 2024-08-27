@@ -1,0 +1,39 @@
+﻿@model IEnumerable<ABCRetailWebApp.Models.Order>
+
+@{
+    ViewData["Title"] = "Orders List";
+}
+
+<h1>Orders</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Customer Name</th>
+            <th>Product Name</th>
+            <th>Quantity</th>
+            <th>Order Date</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.CustomerName</td>
+                <td>@order.ProductName</td>
+                <td>@order.Quantity</td>
+                <td>@order.OrderDate</td>
+                <td>
+                    <a asp-action="Details" asp-route-partitionKey="@order.PartitionKey" asp-route-rowKey="@order.RowKey" class="btn btn-info">Details</a>
+                    <a asp-action="Edit" asp-route-partitionKey="@order.PartitionKey" asp-route-rowKey="@order.RowKey" class="btn btn-warning">Edit</a>
+                    <a asp-action="Delete" asp-route-partitionKey="@order.PartitionKey" asp-route-rowKey="@order.RowKey" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

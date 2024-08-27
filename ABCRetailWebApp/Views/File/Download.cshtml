@@ -1,0 +1,17 @@
+﻿@model ABCRetailWebApp.Models.FileModel
+
+@{
+    ViewData["Title"] = "Download File";
+}
+
+<h1>Download File</h1>
+
+<p>Are you sure you want to download the file "<strong>@Model.FileName</strong>"?</p>
+
+<form asp-action="Download" method="get">
+    <input type="hidden" name="directoryName" value="@ViewData["DirectoryName"]" />
+    <input type="hidden" name="fileName" value="@Model.FileName" />
+    <button type="submit" class="btn btn-primary">Download</button>
+</form>
+
+<a asp-action="List" asp-route-directoryName="@ViewData["DirectoryName"]" class="btn btn-secondary">Back to File List</a>

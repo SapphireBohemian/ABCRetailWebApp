@@ -1,0 +1,43 @@
+﻿@model IEnumerable<ABCRetailWebApp.Models.BlobModel>
+
+@{
+    ViewData["Title"] = "Blob List";
+}
+
+<h1>Blob List</h1>
+
+<!-- Add New Media Button -->
+<a asp-action="Upload" asp-route-containerName="@ViewData["ContainerName"]" class="btn btn-success mb-3">Add New Media</a>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Blob Name</th>
+                <th>Upload Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var blob in Model)
+            {
+                <tr>
+                    <td>@blob.BlobName</td>
+                    <td>@blob.UploadDate.ToString("g")</td>
+                    <td>
+                        <a asp-action="Download" asp-route-containerName="@ViewData["ContainerName"]" asp-route-blobName="@blob.BlobName" class="btn btn-primary">Download</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No blobs found in the container: @ViewData["ContainerName"].</p>
+}
+
+<p>
+    <a asp-action="Gallery" asp-route-containerName="@ViewData["ContainerName"]" class="btn btn-secondary">View Gallery</a>
+</p>

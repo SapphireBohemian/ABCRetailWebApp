@@ -1,0 +1,38 @@
+﻿@model IEnumerable<ABCRetailWebApp.Models.QueueMessage>
+
+<h2>Peek Messages</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Message ID</th>
+            <th>Message Type</th>
+            <th>Content</th>
+            <th>Timestamp</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var message in Model)
+        {
+            <tr>
+                <td>@message.MessageId</td>
+                <td>@message.MessageType</td>
+                <td>@message.Content</td>
+                <td>@message.Timestamp?.ToString("yyyy-MM-ddTHH:mm:ss")</td> <!-- Format the DateTimeOffset -->
+                <td>
+                    <form asp-action="Dequeue" method="post" style="display:inline;">
+                        <input type="hidden" name="messageId" value="@message.MessageId" />
+                        <input type="hidden" name="popReceipt" value="@message.PopReceipt" />
+                        <button type="submit" class="btn btn-warning">Dequeue</button>
+                    </form>
+                    <form asp-action="Delete" method="post" style="display:inline;">
+                        <input type="hidden" name="messageId" value="@message.MessageId" />
+                        <input type="hidden" name="popReceipt" value="@message.PopReceipt" />
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

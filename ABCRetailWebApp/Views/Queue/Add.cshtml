@@ -1,0 +1,13 @@
+﻿@model ABCRetailWebApp.Models.QueueMessage
+
+<h1>Add Message</h1>
+
+<form asp-action="Add" method="post">
+    <div class="form-group">
+        <label asp-for="Content"></label>
+        <input asp-for="Content" class="form-control" />
+        <span asp-validation-for="Content" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Add</button>
+</form>
+

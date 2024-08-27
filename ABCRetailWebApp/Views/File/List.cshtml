@@ -1,0 +1,25 @@
+﻿@model IEnumerable<ABCRetailWebApp.Models.FileModel>
+
+<h1>File List</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>File Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var file in Model)
+        {
+            <tr>
+                <td>@file.FileName</td>
+                <td>
+                    <a asp-action="Download" asp-route-directoryName="files" asp-route-fileName="@file.FileName" class="btn btn-primary">Download</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Upload" class="btn btn-secondary">Upload New File</a>
