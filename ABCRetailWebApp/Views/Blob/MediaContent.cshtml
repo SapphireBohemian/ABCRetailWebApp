@@ -1,0 +1,42 @@
+﻿@model IEnumerable<ABCRetailWebApp.Models.BlobModel>
+
+@{
+    ViewData["Title"] = "Media Content";
+}
+
+<h2>Media Content</h2>
+
+<a asp-action="Gallery" asp-route-containerName="media-content" class="btn btn-secondary mb-3">View Gallery</a>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>File Name</th>
+                <th>Upload Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var blob in Model)
+            {
+                <tr>
+                    <td>
+                        <a href="@Url.Action("DownloadBlob", new { containerName = "media", blobName = blob.BlobName })">
+                            @blob.BlobName
+                        </a>
+                    </td>
+                    <td>@blob.UploadDate.ToString("g")</td>
+                    <td>
+                        <a asp-action="DeleteBlob" asp-route-containerName="media" asp-route-blobName="@blob.BlobName" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No media content found.</p>
+}

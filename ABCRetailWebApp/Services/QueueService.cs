@@ -1,8 +1,8 @@
 ﻿using Azure.Storage.Queues;
 using Azure.Storage.Queues.Models;
 using Newtonsoft.Json;
-//using System.Text.Json;
 using QueueMessageModel = ABCRetailWebApp.Models.QueueMessage;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,24 +12,29 @@ namespace ABCRetailWebApp.Services
     public class QueueService : IQueueService
     {
         private readonly QueueServiceClient _queueServiceClient;
+        private readonly TimeZoneInfo _localTimeZone;
 
         public QueueService(QueueServiceClient queueServiceClient)
         {
             _queueServiceClient = queueServiceClient;
+            _localTimeZone = TimeZoneInfo.Local; // Get the local timezone of the server
         }
 
         private QueueClient GetQueueClient(string queueName) =>
             _queueServiceClient.GetQueueClient(queueName);
 
+        private DateTimeOffset ConvertToLocalTime(DateTimeOffset utcTime)
+        {
+            return TimeZoneInfo.ConvertTime(utcTime, _localTimeZone);
+        }
+
         public async Task AddMessageAsync(string queueName, QueueMessageModel message)
         {
             var queueClient = GetQueueClient(queueName);
             await queueClient.CreateIfNotExistsAsync();
-            string messageText = JsonConvert.SerializeObject(message);
+            string messageText = JsonConvert.SerializeObject(new { message.MessageType, message.Content });
             await queueClient.SendMessageAsync(messageText);
         }
-
-
 
         public async Task<QueueMessageModel> PeekMessageAsync(string queueName)
         {
@@ -37,7 +42,14 @@ namespace ABCRetailWebApp.Services
             var response = await queueClient.PeekMessageAsync();
             if (response.Value != null)
             {
-                return JsonConvert.DeserializeObject<QueueMessageModel>(response.Value.MessageText); // Deserialize JSON to QueueMessageModel
+                var messageData = JsonConvert.DeserializeObject<QueueMessageModel>(response.Value.MessageText);
+                return new QueueMessageModel
+                {
+                    MessageId = response.Value.MessageId,
+                    MessageType = messageData.MessageType,
+                    Content = messageData.Content,
+                    Timestamp = ConvertToLocalTime(response.Value.InsertedOn.Value) // Convert to local time
+                };
             }
             return null;
         }
@@ -47,11 +59,16 @@ namespace ABCRetailWebApp.Services
             var queueClient = GetQueueClient(queueName);
             var response = await queueClient.PeekMessagesAsync(maxMessages);
 
-            return response.Value.Select(msg => new QueueMessageModel
+            return response.Value.Select(msg =>
             {
-                MessageId = msg.MessageId,
-                Content = msg.MessageText,
-                Timestamp = DateTimeOffset.UtcNow // Set to current time if not available
+                var messageData = JsonConvert.DeserializeObject<QueueMessageModel>(msg.MessageText);
+                return new QueueMessageModel
+                {
+                    MessageId = msg.MessageId,
+                    MessageType = messageData.MessageType,
+                    Content = messageData.Content,
+                    Timestamp = ConvertToLocalTime(msg.InsertedOn.Value) // Convert to local time
+                };
             });
         }
 
@@ -62,18 +79,19 @@ namespace ABCRetailWebApp.Services
 
             if (response.Value != null)
             {
+                var messageData = JsonConvert.DeserializeObject<QueueMessageModel>(response.Value.MessageText);
                 return new QueueMessageModel
                 {
                     MessageId = response.Value.MessageId,
                     PopReceipt = response.Value.PopReceipt,
-                    Content = response.Value.MessageText,
-                    Timestamp = response.Value.InsertedOn
+                    MessageType = messageData.MessageType,
+                    Content = messageData.Content,
+                    Timestamp = ConvertToLocalTime(response.Value.InsertedOn.Value) // Convert to local time
                 };
             }
 
             return null;
         }
-
 
         public async Task DeleteMessageAsync(string queueName, string messageId, string popReceipt)
         {

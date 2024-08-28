@@ -2,12 +2,13 @@
 
 @{
     ViewData["Title"] = "Blob List";
+    var containerName = ViewData["ContainerName"]?.ToString();
 }
 
-<h1>Blob List</h1>
+<h1>Blob List for @containerName</h1>
 
 <!-- Add New Media Button -->
-<a asp-action="Upload" asp-route-containerName="@ViewData["ContainerName"]" class="btn btn-success mb-3">Add New Media</a>
+<a asp-action="Upload" asp-route-containerName="@containerName" class="btn btn-success mb-3">Add New Media</a>
 
 @if (Model.Any())
 {
@@ -26,7 +27,7 @@
                     <td>@blob.BlobName</td>
                     <td>@blob.UploadDate.ToString("g")</td>
                     <td>
-                        <a asp-action="Download" asp-route-containerName="@ViewData["ContainerName"]" asp-route-blobName="@blob.BlobName" class="btn btn-primary">Download</a>
+                        <a asp-action="Download" asp-route-containerName="@containerName" asp-route-blobName="@blob.BlobName" class="btn btn-primary">Download</a>
                     </td>
                 </tr>
             }
@@ -35,9 +36,22 @@
 }
 else
 {
-    <p>No blobs found in the container: @ViewData["ContainerName"].</p>
+    <p>No blobs found in the container: @containerName.</p>
 }
 
 <p>
-    <a asp-action="Gallery" asp-route-containerName="@ViewData["ContainerName"]" class="btn btn-secondary">View Gallery</a>
+    <a asp-action="Gallery" asp-route-containerName="@containerName" class="btn btn-secondary">View Gallery</a>
+</p>
+
+<!-- Navigation for container selection -->
+<p>
+    <a asp-action="ListBlobs" asp-route-containerName="product-images" class="btn btn-link">View Product Images</a>
+    <a asp-action="ProductImages" asp-route-containerName="product-images" class="btn btn-primary">View Product Images</a>
+    <a asp-action="MediaContent" asp-route-containerName="media-content" class="btn btn-primary">View Media Content</a>
+    <!-- Assuming your actions are in the BlobController -->
+    <a asp-controller="Blob" asp-action="Gallery" asp-route-containerName="product-images" class="btn btn-primary">View Product Images</a>
+    <a asp-controller="Blob" asp-action="Gallery" asp-route-containerName="media" class="btn btn-primary">View Media Content</a>
+
+
+    <a asp-action="ListBlobs" asp-route-containerName="media-content" class="btn btn-link">View Media Content</a>
 </p>

@@ -27,6 +27,8 @@ namespace ABCRetailWebApp.Controllers
             return View(products);
         }
 
+        
+
         // GET: Product/Details/5
         public async Task<IActionResult> Details(string partitionKey, string rowKey)
         {
@@ -54,7 +56,6 @@ namespace ABCRetailWebApp.Controllers
             return View();
         }
 
-        // POST: Product/Create
         // POST: Product/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -120,7 +121,7 @@ namespace ABCRetailWebApp.Controllers
                 return BadRequest();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 if (newImageFile != null && newImageFile.Length > 0)
                 {
@@ -135,7 +136,7 @@ namespace ABCRetailWebApp.Controllers
                         MessageType = "ImageUpdate",
                         Timestamp = DateTimeOffset.Now
                     };
-                    await _queueService.AddMessageAsync("image-queue", imageQueueMessage);
+                    await _queueService.AddMessageAsync("your-queue-name", imageQueueMessage);
                 }
 
                 await _tableService.UpdateProductAsync(product);
@@ -147,7 +148,7 @@ namespace ABCRetailWebApp.Controllers
                     MessageType = "ProductUpdate",
                     Timestamp = DateTimeOffset.Now
                 };
-                await _queueService.AddMessageAsync("product-queue", productQueueMessage);
+                await _queueService.AddMessageAsync("your-queue-name", productQueueMessage);
 
                 return RedirectToAction(nameof(Details), new { partitionKey = product.PartitionKey, rowKey = product.RowKey });
             }
@@ -176,9 +177,11 @@ namespace ABCRetailWebApp.Controllers
             var product = await _tableService.GetProductAsync(partitionKey, rowKey);
             if (product != null)
             {
+                if (!string.IsNullOrEmpty(product.ImageUrl))
+                {
+                    await _blobService.DeleteProductImageAsync(product.ImageUrl);
+                }
                 await _tableService.DeleteProductAsync(partitionKey, rowKey);
-                await _blobService.DeleteProductImageAsync(product.ImageUrl);
-
                 // Queue message for product deletion
                 var productQueueMessage = new QueueMessage
                 {
@@ -186,7 +189,7 @@ namespace ABCRetailWebApp.Controllers
                     MessageType = "ProductDeletion",
                     Timestamp = DateTimeOffset.Now
                 };
-                await _queueService.AddMessageAsync("product-queue", productQueueMessage);
+                await _queueService.AddMessageAsync("your-queue-name", productQueueMessage);
             }
             return RedirectToAction(nameof(Index));
         }

@@ -1,6 +1,7 @@
 ﻿using ABCRetailWebApp.Models;
 using ABCRetailWebApp.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,6 +17,87 @@ namespace ABCRetailWebApp.Controllers
         {
             _blobService = blobService;
             _queueService = queueService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ListBlobs(string containerName)
+        {
+            if (string.IsNullOrEmpty(containerName))
+            {
+                // Handle error or provide a default container name
+                return View("Error");
+            }
+
+            var blobs = await _blobService.ListBlobsAsync(containerName);
+            ViewData["ContainerName"] = containerName;
+            return View(blobs);
+        }
+
+        public async Task<IActionResult> ProductImages()
+        {
+            var blobs = await _blobService.ListBlobsAsync("product-images");
+            return View("ProductImages", blobs);
+        }
+
+        public async Task<IActionResult> MediaContent()
+        {
+            var blobs = await _blobService.ListBlobsAsync("media-content");
+            return View("MediaContent", blobs);
+        }
+
+        public async Task<IActionResult> DeleteBlob(string containerName, string blobName)
+        {
+            await _blobService.DeleteBlobAsync(containerName, blobName);
+            return RedirectToAction(containerName == "product-images" ? "ProductImages" : "media-content");
+        }
+
+        // Action to view blobs in a specified container
+        public async Task<IActionResult> Gallery(string containerName)
+        {
+            if (string.IsNullOrEmpty(containerName))
+            {
+                return BadRequest("Container name cannot be null or empty.");
+            }
+
+            var blobs = await _blobService.ListBlobsAsync(containerName);
+            ViewBag.ContainerName = containerName;
+            return View(blobs);
+        }
+
+        public async Task<IActionResult> GetImage(string blobName, string containerName)
+        {
+            if (string.IsNullOrEmpty(blobName) || string.IsNullOrEmpty(containerName))
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                // Download the blob as a stream
+                var stream = await _blobService.DownloadBlobAsync(blobName, containerName);
+
+                // Determine the content type based on the file extension
+                var fileExtension = Path.GetExtension(blobName).ToLowerInvariant();
+                var provider = new FileExtensionContentTypeProvider();
+                if (!provider.TryGetContentType(fileExtension, out var contentType))
+                {
+                    contentType = "application/octet-stream"; // Default content type
+                }
+
+                return File(stream, contentType);
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions if needed
+                return NotFound();
+            }
+        }
+
+
+        public async Task<IActionResult> DownloadBlob(string containerName, string blobName)
+        {
+            var blobStream = await _blobService.DownloadBlobAsync(containerName, blobName);
+            return File(blobStream, "application/octet-stream", blobName);
         }
 
         // GET: Blob/Download/{blobName}
@@ -83,13 +165,13 @@ namespace ABCRetailWebApp.Controllers
         // GET: Blob/Index
         public IActionResult Index(string containerName)
         {
-            return RedirectToAction("List", new { containerName = containerName ?? "media" });
+            return RedirectToAction("List", new { containerName = containerName ?? "media-content" });
         }
 
         // GET: Blob/List
         public async Task<IActionResult> List(string containerName)
         {
-            containerName ??= "media-container";
+            containerName ??= "media-content";
 
             if (string.IsNullOrEmpty(containerName))
             {
@@ -108,14 +190,6 @@ namespace ABCRetailWebApp.Controllers
         }
 
         // GET: Blob/Gallery
-        public async Task<IActionResult> Gallery(string containerName)
-        {
-            containerName ??= "media-container";
-
-            var blobList = await _blobService.ListBlobsAsync(containerName);
-
-            ViewData["ContainerName"] = containerName;
-            return View(blobList);
-        }
+        
     }
 }

@@ -19,7 +19,7 @@
                 <td>@message.MessageId</td>
                 <td>@message.MessageType</td>
                 <td>@message.Content</td>
-                <td>@message.Timestamp?.ToString("yyyy-MM-ddTHH:mm:ss")</td> <!-- Format the DateTimeOffset -->
+                <td>@message.Timestamp?.ToString("yyyy-MM-dd-HH:mm:ss")</td> <!-- Format the DateTimeOffset -->
                 <td>
                     <form asp-action="Dequeue" method="post" style="display:inline;">
                         <input type="hidden" name="messageId" value="@message.MessageId" />

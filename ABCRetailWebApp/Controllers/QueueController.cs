@@ -24,7 +24,7 @@ namespace ABCRetailWebApp.Controllers
         public async Task<IActionResult> Peek()
         {
             var queueName = "your-queue-name"; // Replace with your actual queue name
-            var messages = await _queueService.PeekMessagesAsync(queueName, 10); // Adjust the number of messages as needed
+            var messages = await _queueService.PeekMessagesAsync(queueName, 20); // Adjust the number of messages as needed
             return View(messages);
         }
 

@@ -1,0 +1,30 @@
+﻿@model IEnumerable<ABCRetailWebApp.Models.BlobModel>
+
+@{
+    ViewData["Title"] = "Media Gallery";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    @if (Model.Any())
+    {
+        foreach (var blob in Model)
+        {
+            <div class="col-md-3">
+                <div class="thumbnail">
+                    <img src="@Url.Action("Download", "Blob", new { blobName = blob.BlobName, containerName = ViewData["media-content"] })" alt="@blob.BlobName" class="img-thumbnail" />
+                    <div class="caption">
+                        <p>@blob.BlobName</p>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p>No images found in the container: @ViewData["ContainerName"].</p>
+    }
+</div>
+
+

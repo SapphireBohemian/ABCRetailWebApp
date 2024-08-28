@@ -1,0 +1,49 @@
+﻿@model List<ABCRetailWebApp.Models.BlobModel>
+
+@{
+    ViewData["Title"] = "Blob List";
+    var currentContainerName = ViewData["ContainerName"]?.ToString();
+}
+
+<h2>Blob List - @currentContainerName</h2>
+
+<form asp-action="ListBlobs" method="get">
+    <label for="containerName">Select Container:</label>
+    <select id="containerName" name="containerName" onchange="this.form.submit()">
+        @if (currentContainerName == "product-images")
+        {
+            <option value="product-images" selected>View Product Images</option>
+        }
+        else
+        {
+            <option value="product-images">View Product Images</option>
+        }
+
+        @if (currentContainerName == "media-content")
+        {
+            <option value="media" selected>View Media Content</option>
+        }
+        else
+        {
+            <option value="media">View Media Content</option>
+        }
+    </select>
+</form>
+
+@if (Model != null && Model.Any())
+{
+    <ul>
+        @foreach (var blob in Model)
+        {
+            <li>
+                <a href="@Url.Action("DownloadBlob", new { containerName = currentContainerName, blobName = blob.BlobName })">
+                    @blob.BlobName
+                </a>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>No blobs found.</p>
+}

@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<ABCRetailWebApp.Models.Product>
 
 @{
-    ViewData["Title"] = "Products List";
+    ViewData["Title"] = "Products";
 }
 
 <h1>Products</h1>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary">Create New</a>
+    <a asp-action="Create" class="btn btn-primary">Add New Product</a>
 </p>
 
 <table class="table">
@@ -17,7 +17,7 @@
             <th>Description</th>
             <th>Price</th>
             <th>Image</th>
-            <th></th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -26,15 +26,15 @@
             <tr>
                 <td>@product.Name</td>
                 <td>@product.Description</td>
-                <td>@product.Price</td>
+                <td>@product.Price.ToString("C")</td>
                 <td>
                     @if (!string.IsNullOrEmpty(product.ImageUrl))
                     {
-                        <img src="@product.ImageUrl" alt="@product.Name" class="img-thumbnail" style="max-width: 100px;" />
+                        <img src="@Url.Content(product.ImageUrl)" alt="Product Image" style="max-height: 100px; max-width: 100px;" />
                     }
                     else
                     {
-                        <p>No image</p>
+                        <span>No image</span>
                     }
                 </td>
                 <td>

@@ -1,4 +1,5 @@
 ﻿using ABCRetailWebApp.Models;
+using Azure.Storage;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Http;
@@ -20,6 +21,9 @@ namespace ABCRetailWebApp.Services
 
         private BlobContainerClient GetContainerClient(string containerName)
         {
+            if (string.IsNullOrWhiteSpace(containerName))
+                throw new ArgumentException("Container name cannot be null or empty.", nameof(containerName));
+
             try
             {
                 return _blobServiceClient.GetBlobContainerClient(containerName);
@@ -127,10 +131,9 @@ namespace ABCRetailWebApp.Services
             {
                 throw new ArgumentNullException(nameof(imageUrl), "The image URL cannot be null or empty.");
             }
-
             try
             {
-                var blobClient = new BlobClient(new Uri(imageUrl));
+                var blobClient = new BlobClient(new Uri(imageUrl), new StorageSharedKeyCredential("azurestorage420", "NGbalqfmF7D5nD5ylimKpoEwwI0I1GPK4DRSs1PHijwMKDd2MR1YWA3Tt+UDHP6blv1U5mlv3Zq9+ASt4+hFPg=="));
                 var response = await blobClient.DownloadAsync();
                 return response.Value.Content;
             }
@@ -141,11 +144,23 @@ namespace ABCRetailWebApp.Services
         }
 
 
+
         public async Task DeleteProductImageAsync(string imageUrl)
         {
             try
             {
-                var blobClient = new BlobClient(new Uri(imageUrl));
+                // Extract the container name and blob name from the image URL
+                Uri blobUri = new Uri(imageUrl);
+                string containerName = blobUri.Segments[1].TrimEnd('/');
+                string blobName = string.Join("", blobUri.Segments.Skip(2));
+
+                // Get the container client
+                var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
+
+                // Get the blob client
+                var blobClient = containerClient.GetBlobClient(blobName);
+
+                // Delete the blob if it exists
                 await blobClient.DeleteIfExistsAsync();
             }
             catch (Exception ex)
@@ -153,5 +168,6 @@ namespace ABCRetailWebApp.Services
                 throw new InvalidOperationException($"Failed to delete product image from URL: {imageUrl}", ex);
             }
         }
+
     }
 }

@@ -1,30 +1,35 @@
 ﻿@model IEnumerable<ABCRetailWebApp.Models.BlobModel>
 
 @{
-    ViewData["Title"] = "Media Gallery";
+    ViewData["Title"] = "Gallery";
+    var containerName = ViewBag.ContainerName as string;
 }
 
-<h1>@ViewData["Title"]</h1>
+<h1>Gallery - @containerName</h1>
 
-<div class="row">
-    @if (Model.Any())
-    {
-        foreach (var blob in Model)
+<table class="table">
+    <thead>
+        <tr>
+            <th>Image</th>
+            <th>Blob Name</th>
+            <th>Upload Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var blob in Model)
         {
-            <div class="col-md-3">
-                <div class="thumbnail">
-                    <img src="@Url.Action("Download", "Blob", new { blobName = blob.BlobName, containerName = ViewData["ContainerName"] })" alt="@blob.BlobName" class="img-thumbnail" />
-                    <div class="caption">
-                        <p>@blob.BlobName</p>
-                    </div>
-                </div>
-            </div>
+            <tr>
+                <td>
+                    <img src="@Url.Action("GetImage", "Blob", new { blobName = blob.BlobName, containerName = containerName })" alt="@blob.BlobName" style="max-width: 200px; max-height: 200px;"/>
+                </td>
+                <td>@blob.BlobName</td>
+                <td>@blob.UploadDate</td>
+                <td>
+                    <a href="@Url.Action("DownloadBlob", "Blob", new { blobName = blob.BlobName, containerName = containerName })" class="btn btn-primary">Download</a>
+                    <a href="@Url.Action("DeleteBlob", "Blob", new { blobName = blob.BlobName, containerName = containerName })" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
         }
-    }
-    else
-    {
-        <p>No images found in the container: @ViewData["ContainerName"].</p>
-    }
-</div>
-
-
+    </tbody>
+</table>
