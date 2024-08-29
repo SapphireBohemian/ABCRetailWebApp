@@ -5,31 +5,40 @@
     var containerName = ViewBag.ContainerName as string;
 }
 
-<h1>Gallery - @containerName</h1>
+<div class="container gallery-container">
+    <h1 class="page-title">Gallery - @containerName</h1>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Image</th>
-            <th>Blob Name</th>
-            <th>Upload Date</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var blob in Model)
+    <!-- Blob Gallery -->
+    <div class="blob-gallery">
+        @if (Model != null && Model.Any())
         {
-            <tr>
-                <td>
-                    <img src="@Url.Action("GetImage", "Blob", new { blobName = blob.BlobName, containerName = containerName })" alt="@blob.BlobName" style="max-width: 200px; max-height: 200px;"/>
-                </td>
-                <td>@blob.BlobName</td>
-                <td>@blob.UploadDate</td>
-                <td>
-                    <a href="@Url.Action("DownloadBlob", "Blob", new { blobName = blob.BlobName, containerName = containerName })" class="btn btn-primary">Download</a>
-                    <a href="@Url.Action("DeleteBlob", "Blob", new { blobName = blob.BlobName, containerName = containerName })" class="btn btn-danger">Delete</a>
-                </td>
-            </tr>
+            <div class="row">
+                @foreach (var blob in Model)
+                {
+                    <div class="col-md-4 mb-4">
+                        <div class="thumbnail card">
+                            <img src="@Url.Action("GetImage", "Blob", new { blobName = blob.BlobName, containerName = containerName })"
+                                 alt="@blob.BlobName"
+                                 class="card-img-top"
+                                 onerror="this.src='@Url.Content("~/images/placeholder.png")';" />
+                            <div class="card-body">
+                                <h5 class="card-title">@blob.BlobName</h5>
+                                <p class="card-text">Uploaded on: @blob.UploadDate.ToString("g")</p>
+                                <a href="@Url.Action("DownloadBlob", "Blob", new { blobName = blob.BlobName, containerName = containerName })"
+                                   class="btn btn-primary">Download</a>
+                                <a href="@Url.Action("DeleteBlob", "Blob", new { blobName = blob.BlobName, containerName = containerName })"
+                                   class="btn btn-danger">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
         }
-    </tbody>
-</table>
+        else
+        {
+            <p class="text-center">No blobs found.</p>
+        }
+    </div>
+</div>
+
+

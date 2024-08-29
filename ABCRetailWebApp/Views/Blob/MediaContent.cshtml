@@ -1,42 +1,47 @@
 ﻿@model IEnumerable<ABCRetailWebApp.Models.BlobModel>
 
 @{
-    ViewData["Title"] = "Media Content";
+    ViewData["Title"] = "Blob List";
+    var containerName = ViewData["ContainerName"]?.ToString();
 }
 
-<h2>Media Content</h2>
+<div class="container mt-5">
+    <h2 class="mb-4">Media Content</h2>
 
-<a asp-action="Gallery" asp-route-containerName="media-content" class="btn btn-secondary mb-3">View Gallery</a>
+    <!-- Add New Media Button -->
+    <a asp-action="Upload" asp-route-containerName="media-content" class="btn btn-success mb-3">Add New Media</a>
+    <a asp-action="Gallery" asp-route-containerName="media-content" class="btn btn-secondary mb-3">View Gallery</a>
 
-@if (Model != null && Model.Any())
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>File Name</th>
-                <th>Upload Date</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var blob in Model)
-            {
+    @if (Model != null && Model.Any())
+    {
+        <table class="table table-bordered table-striped">
+            <thead>
                 <tr>
-                    <td>
-                        <a href="@Url.Action("DownloadBlob", new { containerName = "media", blobName = blob.BlobName })">
-                            @blob.BlobName
-                        </a>
-                    </td>
-                    <td>@blob.UploadDate.ToString("g")</td>
-                    <td>
-                        <a asp-action="DeleteBlob" asp-route-containerName="media" asp-route-blobName="@blob.BlobName" class="btn btn-danger">Delete</a>
-                    </td>
+                    <th>File Name</th>
+                    <th>Upload Date</th>
+                    <th>Actions</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>No media content found.</p>
-}
+            </thead>
+            <tbody>
+                @foreach (var blob in Model)
+                {
+                    <tr>
+                        <td>
+                            <a href="@Url.Action("DownloadBlob", new { containerName = "media-content", blobName = blob.BlobName })">
+                                @blob.BlobName
+                            </a>
+                        </td>
+                        <td>@blob.UploadDate.ToString("g")</td>
+                        <td>
+                            <a asp-action="DeleteBlob" asp-route-containerName="media-content" asp-route-blobName="@blob.BlobName" class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No media content found.</p>
+    }
+</div>

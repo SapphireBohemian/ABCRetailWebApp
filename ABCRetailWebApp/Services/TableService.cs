@@ -26,6 +26,13 @@ namespace ABCRetailWebApp.Services
             return tableClient;
         }
 
+        public async Task<Product> GetProductByRowKeyAsync(string rowKey)
+        {
+            var tableClient = _tableServiceClient.GetTableClient("Products"); // Assuming table name is "Products"
+            var response = await tableClient.GetEntityAsync<Product>("PartitionKey", rowKey); // Use actual partition key
+            return response.Value;
+        }
+
         // Order methods
         public async Task<Order> GetOrderAsync(string partitionKey, string rowKey)
         {
@@ -96,8 +103,24 @@ namespace ABCRetailWebApp.Services
         public async Task UpdateProductAsync(Product product)
         {
             var tableClient = GetTableClient("products");
+
+            // Retrieve the existing product to get its ETag
+            var existingProduct = await tableClient.GetEntityAsync<Product>(product.PartitionKey, product.RowKey);
+
+            // Ensure the product has a valid ETag before updating
+            if (string.IsNullOrEmpty(existingProduct.Value.ETag.ToString()))
+            {
+                throw new ArgumentException("ETag cannot be null or empty", nameof(product.ETag));
+            }
+
+            // Set the ETag of the existing product to the one being updated
+            product.ETag = existingProduct.Value.ETag;
+
             await tableClient.UpdateEntityAsync(product, product.ETag, TableUpdateMode.Replace);
         }
+
+
+
 
         public async Task DeleteProductAsync(string partitionKey, string rowKey)
         {

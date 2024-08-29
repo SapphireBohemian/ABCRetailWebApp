@@ -36,6 +36,27 @@ namespace ABCRetailWebApp.Services
             await queueClient.SendMessageAsync(messageText);
         }
 
+        public async Task<QueueMessageModel> GetMessageByIdAsync(string queueName, string messageId)
+        {
+            var queueClient = GetQueueClient(queueName);
+            var messages = await queueClient.ReceiveMessagesAsync(maxMessages: 32); // Adjust as needed
+
+            var message = messages.Value.FirstOrDefault(m => m.MessageId == messageId);
+            if (message != null)
+            {
+                var messageData = JsonConvert.DeserializeObject<QueueMessageModel>(message.MessageText);
+                return new QueueMessageModel
+                {
+                    MessageId = message.MessageId,
+                    PopReceipt = message.PopReceipt,
+                    MessageType = messageData.MessageType,
+                    Content = messageData.Content,
+                    Timestamp = ConvertToLocalTime(message.InsertedOn.Value) // Convert to local time
+                };
+            }
+            return null;
+        }
+
         public async Task<QueueMessageModel> PeekMessageAsync(string queueName)
         {
             var queueClient = GetQueueClient(queueName);

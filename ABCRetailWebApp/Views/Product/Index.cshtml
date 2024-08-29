@@ -4,45 +4,49 @@
     ViewData["Title"] = "Products";
 }
 
-<h1>Products</h1>
+<div class="container mt-4">
+    <h1 class="mb-4 text-center">Products</h1>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Add New Product</a>
-</p>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Price</th>
-            <th>Image</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var product in Model)
-        {
-            <tr>
-                <td>@product.Name</td>
-                <td>@product.Description</td>
-                <td>@product.Price.ToString("C")</td>
-                <td>
-                    @if (!string.IsNullOrEmpty(product.ImageUrl))
-                    {
-                        <img src="@Url.Content(product.ImageUrl)" alt="Product Image" style="max-height: 100px; max-width: 100px;" />
-                    }
-                    else
-                    {
-                        <span>No image</span>
-                    }
-                </td>
-                <td>
-                    <a asp-action="Details" asp-route-partitionKey="@product.PartitionKey" asp-route-rowKey="@product.RowKey" class="btn btn-info">Details</a>
-                    <a asp-action="Edit" asp-route-partitionKey="@product.PartitionKey" asp-route-rowKey="@product.RowKey" class="btn btn-warning">Edit</a>
-                    <a asp-action="Delete" asp-route-partitionKey="@product.PartitionKey" asp-route-rowKey="@product.RowKey" class="btn btn-danger">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <div class="text-end mb-3">
+        <a asp-action="Create" class="btn btn-primary">Add New Product</a>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Image</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var product in Model)
+                {
+                    <tr>
+                        <td>@product.Name</td>
+                        <td>@product.Description</td>
+                        <td>@product.Price.ToString("C")</td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(product.ImageUrl))
+                            {
+                                <img src="@Url.Content(product.ImageUrl)" alt="Product Image" class="img-thumbnail" style="max-height: 100px; max-width: 100px;" />
+                            }
+                            else
+                            {
+                                <span>No image</span>
+                            }
+                        </td>
+                        <td>
+                            <a asp-action="Details" asp-route-partitionKey="@product.PartitionKey" asp-route-rowKey="@product.RowKey" class="btn btn-info btn-sm">Details</a>
+                            <a asp-action="Edit" asp-route-partitionKey="@product.PartitionKey" asp-route-rowKey="@product.RowKey" class="btn btn-warning btn-sm">Edit</a>
+                            <a asp-action="Delete" asp-route-partitionKey="@product.PartitionKey" asp-route-rowKey="@product.RowKey" class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    
+</div>

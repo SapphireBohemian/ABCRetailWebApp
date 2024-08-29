@@ -4,34 +4,38 @@
     ViewData["Title"] = "Customers List";
 }
 
-<h1>Customers</h1>
+<div class="container mt-4">
+    <h1 class="mb-4 text-center">Customer List</h1>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Create New</a>
-</p>
+    <div class="text-end mb-3">
+        <a asp-action="Create" class="btn btn-primary">Add New Customer</a>
+    </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Address</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var customer in Model)
-        {
-            <tr>
-                <td>@customer.Name</td>
-                <td>@customer.Email</td>
-                <td>@customer.Address</td>
-                <td>
-                    <a asp-action="Details" asp-route-partitionKey="@customer.PartitionKey" asp-route-rowKey="@customer.RowKey" class="btn btn-info">Details</a>
-                    <a asp-action="Edit" asp-route-partitionKey="@customer.PartitionKey" asp-route-rowKey="@customer.RowKey" class="btn btn-warning">Edit</a>
-                    <a asp-action="Delete" asp-route-partitionKey="@customer.PartitionKey" asp-route-rowKey="@customer.RowKey" class="btn btn-danger">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var customer in Model)
+                {
+                    <tr>
+                        <td>@customer.Name</td>
+                        <td>@customer.Email</td>
+                        <td>@customer.Address</td>
+                        <td>
+                            <a asp-action="Details" asp-route-partitionKey="@customer.PartitionKey" asp-route-rowKey="@customer.RowKey" class="btn btn-info btn-sm">View</a>
+                            <a asp-action="Edit" asp-route-partitionKey="@customer.PartitionKey" asp-route-rowKey="@customer.RowKey" class="btn btn-warning btn-sm">Edit</a>
+                            <a asp-action="Delete" asp-route-partitionKey="@customer.PartitionKey" asp-route-rowKey="@customer.RowKey" class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

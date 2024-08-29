@@ -2,16 +2,19 @@
 using ABCRetailWebApp.Models;
 using ABCRetailWebApp.Services;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging; // Ensure you have this import
 
 namespace ABCRetailWebApp.Controllers
 {
     public class QueueController : Controller
     {
         private readonly IQueueService _queueService;
+        private readonly ILogger<QueueController> _logger;
 
-        public QueueController(IQueueService queueService)
+        public QueueController(IQueueService queueService, ILogger<QueueController> logger)
         {
             _queueService = queueService;
+            _logger = logger;
         }
 
         // GET: Queue
@@ -29,6 +32,7 @@ namespace ABCRetailWebApp.Controllers
         }
 
         // POST: Queue/Dequeue
+        // POST: Queue/Dequeue
         [HttpPost]
         public async Task<IActionResult> Dequeue()
         {
@@ -43,7 +47,6 @@ namespace ABCRetailWebApp.Controllers
             // Render the dequeued message with the popReceipt and messageId
             return View("Dequeue", dequeuedMessage);
         }
-
 
         [HttpGet]
         public IActionResult Add()

@@ -1,24 +1,30 @@
 ﻿@model ABCRetailWebApp.Models.QueueMessage
 
-<h2>Dequeued Message</h2>
-
-@if (Model != null)
-{
-    <div>
-        <p><strong>Message Type:</strong> @Model.MessageType</p>
-        <p><strong>Content:</strong> @Model.Content</p>
-        <p><strong>Timestamp:</strong> @Model.Timestamp</p>
-
-        <form asp-action="Delete" method="post">
-            <input type="hidden" name="messageId" value="@Model.MessageId" />
-            <input type="hidden" name="popReceipt" value="@Model.PopReceipt" />
-            <button type="submit" class="btn btn-danger">Delete Message</button>
-        </form>
-    </div>
-}
-else
-{
-    <p>No message to display.</p>
+@{
+    ViewData["Title"] = "Dequeued Message";
 }
 
-<a href="@Url.Action("Peek", "Queue")" class="btn btn-primary">Back to Queue</a>
+<div class="container">
+    <h1 class="mb-4">Dequeued Message</h1>
+
+    @if (Model != null)
+    {
+        <div class="alert alert-info">
+            <p><strong>Message Type:</strong> @Model.MessageType</p>
+            <p><strong>Content:</strong> @Model.Content</p>
+            <p><strong>Timestamp:</strong> @Model.Timestamp?.ToString("yyyy-MM-dd HH:mm:ss")</p>
+
+            <form asp-action="Delete" method="post">
+                <input type="hidden" name="messageId" value="@Model.MessageId" />
+                <input type="hidden" name="popReceipt" value="@Model.PopReceipt" />
+                <button type="submit" class="btn btn-danger btn-lg">Delete Message</button>
+            </form>
+        </div>
+    }
+    else
+    {
+        <p class="alert alert-warning">No message to display.</p>
+    }
+
+    <a href="@Url.Action("Peek", "Queue")" class="btn btn-primary btn-lg">Back to Queue</a>
+</div>

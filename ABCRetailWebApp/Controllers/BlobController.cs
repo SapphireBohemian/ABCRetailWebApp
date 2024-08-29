@@ -12,11 +12,13 @@ namespace ABCRetailWebApp.Controllers
     {
         private readonly IBlobService _blobService;
         private readonly IQueueService _queueService;
+        private readonly ITableService _tableService;
 
-        public BlobController(IBlobService blobService, IQueueService queueService)
+        public BlobController(IBlobService blobService, IQueueService queueService, ITableService tableService)
         {
             _blobService = blobService;
             _queueService = queueService;
+            _tableService = tableService;
         }
 
         [HttpGet]
@@ -47,9 +49,25 @@ namespace ABCRetailWebApp.Controllers
 
         public async Task<IActionResult> DeleteBlob(string containerName, string blobName)
         {
+            // Ensure containerName and blobName are valid
+            if (string.IsNullOrEmpty(containerName) || string.IsNullOrEmpty(blobName))
+            {
+                return BadRequest("Container name or blob name cannot be null or empty.");
+            }
+
+            // Call DeleteBlobAsync with the correct parameters
             await _blobService.DeleteBlobAsync(containerName, blobName);
-            return RedirectToAction(containerName == "product-images" ? "ProductImages" : "media-content");
+
+            // Redirect or return appropriate response
+            if (containerName.Equals("media-content", StringComparison.OrdinalIgnoreCase))
+            {
+                return RedirectToAction("MediaContent");
+            }
+            return RedirectToAction("Index"); // or another appropriate action
         }
+
+
+
 
         // Action to view blobs in a specified container
         public async Task<IActionResult> Gallery(string containerName)
@@ -73,32 +91,75 @@ namespace ABCRetailWebApp.Controllers
 
             try
             {
-                // Download the blob as a stream
                 var stream = await _blobService.DownloadBlobAsync(blobName, containerName);
 
-                // Determine the content type based on the file extension
                 var fileExtension = Path.GetExtension(blobName).ToLowerInvariant();
                 var provider = new FileExtensionContentTypeProvider();
-                if (!provider.TryGetContentType(fileExtension, out var contentType))
-                {
-                    contentType = "application/octet-stream"; // Default content type
-                }
+                provider.TryGetContentType(fileExtension, out var contentType);
 
-                return File(stream, contentType);
+                return File(stream, contentType ?? "application/octet-stream");
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
+        }
+
+        public async Task<IActionResult> GetProductImage(string rowKey)
+        {
+            if (string.IsNullOrEmpty(rowKey))
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                // Retrieve product details using RowKey
+                var product = await _tableService.GetProductByRowKeyAsync(rowKey);
+
+                if (product != null && !string.IsNullOrEmpty(product.ImageUrl))
+                {
+                    var imageStream = await _blobService.DownloadBlobAsync("product-images", product.ImageUrl);
+                    var contentType = "image/jpeg"; // You might want to determine this dynamically
+
+                    return File(imageStream, contentType);
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
             catch (Exception ex)
             {
-                // Handle exceptions if needed
+                // Handle exceptions and log errors
                 return NotFound();
             }
         }
 
 
+
         public async Task<IActionResult> DownloadBlob(string containerName, string blobName)
         {
-            var blobStream = await _blobService.DownloadBlobAsync(containerName, blobName);
-            return File(blobStream, "application/octet-stream", blobName);
+            try
+            {
+                // Sanitize the blob name
+                blobName = Uri.EscapeDataString(blobName);
+
+                var blobStream = await _blobService.DownloadBlobAsync(blobName, containerName);
+                return File(blobStream, "application/octet-stream", blobName);
+            }
+            catch (InvalidOperationException ex)
+            {
+                // Handle specific exceptions, such as invalid blob or container names
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                // Handle other exceptions
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
+
 
         // GET: Blob/Download/{blobName}
         public async Task<IActionResult> Download(string blobName, string containerName)
@@ -133,6 +194,9 @@ namespace ABCRetailWebApp.Controllers
                 {
                     try
                     {
+                        // Log container name and file details
+                        Console.WriteLine($"Uploading file: {model.File.FileName} to container: {model.ContainerName}");
+
                         await _blobService.UploadBlobAsync(model.File, model.ContainerName);
 
                         // Queue message for image upload
@@ -144,16 +208,19 @@ namespace ABCRetailWebApp.Controllers
                         };
                         await _queueService.AddMessageAsync("your-queue-name", imageQueueMessage);
 
+                        ViewBag.Message = "Upload successful!";
                         return RedirectToAction("List", new { containerName = model.ContainerName });
                     }
                     catch (Exception ex)
                     {
                         ModelState.AddModelError("", $"An error occurred while uploading the file: {ex.Message}");
+                        Console.WriteLine($"Error during upload: {ex.Message}");
                     }
                 }
                 else
                 {
                     ModelState.AddModelError("", "File or container name is missing.");
+                    Console.WriteLine("File or container name is missing.");
                 }
             }
 
@@ -189,7 +256,5 @@ namespace ABCRetailWebApp.Controllers
             return View(blobList);
         }
 
-        // GET: Blob/Gallery
-        
     }
 }

@@ -4,37 +4,40 @@
     ViewData["Title"] = "Edit Customer";
 }
 
-<h1>Edit Customer</h1>
+<div class="container mt-4">
+    <h1 class="mb-4">Edit Customer</h1>
 
-<form asp-action="Edit">
-    <div class="form-group">
-        <label asp-for="PartitionKey" class="control-label"></label>
-        <input asp-for="PartitionKey" class="form-control" readonly />
-        <span asp-validation-for="PartitionKey" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="RowKey" class="control-label"></label>
-        <input asp-for="RowKey" class="form-control" readonly />
-        <span asp-validation-for="RowKey" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Name" class="control-label"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Email" class="control-label"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Address" class="control-label"></label>
-        <input asp-for="Address" class="form-control" />
-        <span asp-validation-for="Address" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <input type="submit" value="Save Changes" class="btn btn-primary" />
-    </div>
-</form>
+    <form asp-action="Edit">
+        <div class="mb-3">
+            <label asp-for="PartitionKey" class="form-label"></label>
+            <input asp-for="PartitionKey" class="form-control" readonly />
+            <span asp-validation-for="PartitionKey" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="RowKey" class="form-label"></label>
+            <input asp-for="RowKey" class="form-control" readonly />
+            <span asp-validation-for="RowKey" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label">Name</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label">Email</label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Address" class="form-label">Address</label>
+            <input asp-for="Address" class="form-control" />
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <input type="submit" value="Save Changes" class="btn btn-primary" />
+            <a asp-action="Details" asp-route-partitionKey="@Model.PartitionKey" asp-route-rowKey="@Model.RowKey" class="btn btn-secondary">Back to Details</a>
+        </div>
+    </form>
 
-<a asp-action="Details" asp-route-partitionKey="@Model.PartitionKey" asp-route-rowKey="@Model.RowKey">Back to Details</a>
+   
+</div>

@@ -4,31 +4,33 @@
     ViewData["Title"] = "Product Details";
 }
 
-<h1>@Model.Name</h1>
+<div class="container mt-4">
+    <h1 class="mb-4">@Model.Name</h1>
 
-<div>
-    <h4>Description</h4>
-    <p>@Model.Description</p>
+    <div class="mb-3">
+        <h4>Description</h4>
+        <p>@Model.Description</p>
+    </div>
+
+    <div class="mb-3">
+        <h4>Price</h4>
+        <p>@Model.Price.ToString("C")</p>
+    </div>
+
+    <div class="mb-3">
+        <h4>Image</h4>
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <img src="@Model.ImageUrl" alt="Product Image" style="max-height: 300px;" />
+        }
+        else
+        {
+            <span>No image available</span>
+        }
+    </div>
+
+    <p>
+        <a asp-action="Edit" asp-route-partitionKey="@Model.PartitionKey" asp-route-rowKey="@Model.RowKey" class="btn btn-warning">Edit</a>
+        <a asp-action="Index" class="btn btn-primary">Back to List</a>
+    </p>
 </div>
-
-<div>
-    <h4>Price</h4>
-    <p>@Model.Price.ToString("C")</p>
-</div>
-
-<div>
-    <h4>Image</h4>
-    @if (!string.IsNullOrEmpty(Model.ImageUrl))
-    {
-        <img src="@Model.ImageUrl" alt="Product Image" style="max-height: 300px;" />
-    }
-    else
-    {
-        <span>No image available</span>
-    }
-</div>
-
-<p>
-    <a asp-action="Edit" asp-route-partitionKey="@Model.PartitionKey" asp-route-rowKey="@Model.RowKey" class="btn btn-warning">Edit</a>
-    <a asp-action="Index" class="btn btn-primary">Back to List</a>
-</p>

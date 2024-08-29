@@ -1,25 +1,34 @@
 ﻿@model IEnumerable<ABCRetailWebApp.Models.FileModel>
 
-<h1>File List</h1>
+@{
+    ViewData["Title"] = "Files";
+}
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>File Name</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var file in Model)
-        {
+<div class="container">
+    <h1 class="mb-4">Files</h1>
+
+    <p class="mb-3">
+        <a asp-action="Upload" class="btn btn-primary">Upload New File</a>
+    </p>
+
+    <table class="table table-striped">
+        <thead>
             <tr>
-                <td>@file.FileName</td>
-                <td>
-                    <a asp-action="Download" asp-route-directoryName="files" asp-route-fileName="@file.FileName" class="btn btn-primary">Download</a>
-                </td>
+                <th>File Name</th>
+                <th>Actions</th>
             </tr>
-        }
-    </tbody>
-</table>
-
-<a asp-action="Upload" class="btn btn-secondary">Upload New File</a>
+        </thead>
+        <tbody>
+            @foreach (var file in Model)
+            {
+                <tr>
+                    <td>@file.FileName</td>
+                    <td>
+                        <a asp-action="Download" asp-route-fileName="@file.FileName" class="btn btn-info btn-sm">Download</a>
+                        <a asp-action="Delete" asp-route-fileName="@file.FileName" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

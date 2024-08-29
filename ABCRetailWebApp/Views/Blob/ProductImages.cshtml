@@ -4,39 +4,41 @@
     ViewData["Title"] = "Product Images";
 }
 
-<h2>Product Images</h2>
+<div class="container mt-5">
+    <h2 class="mb-4">Product Images</h2>
+    
+    <a asp-action="Gallery" asp-route-containerName="product-images" class="btn btn-secondary mb-3">View Gallery</a>
 
-<a asp-action="Gallery" asp-route-containerName="product-images" class="btn btn-secondary mb-3">View Gallery</a>
-
-@if (Model != null && Model.Any())
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Image Name</th>
-                <th>Upload Date</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var blob in Model)
-            {
+    @if (Model != null && Model.Any())
+    {
+        <table class="table table-bordered table-striped">
+            <thead>
                 <tr>
-                    <td>
-                        <a href="@Url.Action("DownloadBlob", new { containerName = "product-images", blobName = blob.BlobName })">
-                            @blob.BlobName
-                        </a>
-                    </td>
-                    <td>@blob.UploadDate.ToString("g")</td>
-                    <td>
-                        <a asp-action="DeleteBlob" asp-route-containerName="product-images" asp-route-blobName="@blob.BlobName" class="btn btn-danger">Delete</a>
-                    </td>
+                    <th>Image Name</th>
+                    <th>Upload Date</th>
+                    <th>Actions</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>No product images found.</p>
-}
+            </thead>
+            <tbody>
+                @foreach (var blob in Model)
+                {
+                    <tr>
+                        <td>
+                            <a href="@Url.Action("DownloadBlob", new { containerName = "product-images", blobName = blob.BlobName })">
+                                @blob.BlobName
+                            </a>
+                        </td>
+                        <td>@blob.UploadDate.ToString("g")</td>
+                        <td>
+                            <a asp-action="DeleteBlob" asp-route-containerName="product-images" asp-route-blobName="@blob.BlobName" class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No product images found.</p>
+    }
+</div>

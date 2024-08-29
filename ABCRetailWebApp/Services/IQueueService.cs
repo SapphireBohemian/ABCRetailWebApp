@@ -11,6 +11,8 @@ namespace ABCRetailWebApp.Services
         Task<QueueMessageModel> PeekMessageAsync(string queueName);
         Task<IEnumerable<QueueMessageModel>> PeekMessagesAsync(string queueName, int maxMessages);
         Task<QueueMessageModel> DequeueMessageAsync(string queueName);
-        Task DeleteMessageAsync(string queueName, string messageId, string popReceipt); // Updated method
+        Task DeleteMessageAsync(string queueName, string messageId, string popReceipt);
+        Task<QueueMessageModel> GetMessageByIdAsync(string queueName, string messageId);
     }
+
 }

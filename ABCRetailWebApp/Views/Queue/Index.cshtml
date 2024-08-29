@@ -3,22 +3,29 @@
     ViewData["Title"] = "Queue Management";
 }
 
-<h2>Queue Management</h2>
+<div class="container">
+    <h1 class="mb-5 text-center">Queue Management</h1>
 
-<a href="@Url.Action("Peek", "Queue")" class="btn btn-primary">Peek Message</a>
-<a href="@Url.Action("Dequeue", "Queue")" class="btn btn-primary">Dequeue Message</a>
+    <div class="btn-group mb-5 d-flex justify-content-center">
+        <a href="@Url.Action("Peek", "Queue")" class="btn btn-primary btn-lg mx-2">Peek Message</a>
+        <a href="@Url.Action("Dequeue", "Queue")" class="btn btn-secondary btn-lg mx-2">Dequeue Message</a>
+    </div>
 
-<form asp-action="Add" method="post">
-    <h3>Add Message</h3>
-    <div class="form-group">
-        <label asp-for="MessageType" class="control-label"></label>
-        <input asp-for="MessageType" class="form-control" />
-        <span asp-validation-for="MessageType" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Content" class="control-label"></label>
-        <textarea asp-for="Content" class="form-control"></textarea>
-        <span asp-validation-for="Content" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-primary">Add Message</button>
-</form>
+    <form asp-action="Add" method="post" class="form-container">
+        <h3 class="mb-4 text-center">Add Message</h3>
+        <div class="form-group mb-3">
+            <label asp-for="MessageType" class="form-label">Message Type</label>
+            <input asp-for="MessageType" class="form-control" placeholder="Enter message type" />
+            <span asp-validation-for="MessageType" class="text-danger"></span>
+        </div>
+        <div class="form-group mb-4">
+            <label asp-for="Content" class="form-label">Message Content</label>
+            <textarea asp-for="Content" class="form-control" rows="4" placeholder="Enter message content"></textarea>
+            <span asp-validation-for="Content" class="text-danger"></span>
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary btn-lg">Add Message</button>
+        </div>
+    </form>
+</div>

@@ -2,7 +2,6 @@
 using ABCRetailWebApp.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ABCRetailWebApp.Controllers
@@ -26,8 +25,6 @@ namespace ABCRetailWebApp.Controllers
             var products = await _tableService.GetAllProductsAsync();
             return View(products);
         }
-
-        
 
         // GET: Product/Details/5
         public async Task<IActionResult> Details(string partitionKey, string rowKey)
@@ -97,8 +94,6 @@ namespace ABCRetailWebApp.Controllers
             return View(product);
         }
 
-
-
         // GET: Product/Edit/5
         public async Task<IActionResult> Edit(string partitionKey, string rowKey)
         {
@@ -111,7 +106,6 @@ namespace ABCRetailWebApp.Controllers
         }
 
         // POST: Product/Edit/5
-        // POST: Product/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string partitionKey, string rowKey, Product product, IFormFile newImageFile)
@@ -121,11 +115,16 @@ namespace ABCRetailWebApp.Controllers
                 return BadRequest();
             }
 
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
+                // Only delete the old image if a new image is uploaded and the old ImageUrl is not null or empty
                 if (newImageFile != null && newImageFile.Length > 0)
                 {
-                    await _blobService.DeleteProductImageAsync(product.ImageUrl);
+                    if (!string.IsNullOrEmpty(product.ImageUrl))
+                    {
+                        await _blobService.DeleteProductImageAsync(product.ImageUrl);
+                    }
+
                     var newImageUrl = await _blobService.UploadProductImageAsync(newImageFile, product.RowKey);
                     product.ImageUrl = newImageUrl;
 
@@ -152,9 +151,9 @@ namespace ABCRetailWebApp.Controllers
 
                 return RedirectToAction(nameof(Details), new { partitionKey = product.PartitionKey, rowKey = product.RowKey });
             }
+
             return View(product);
         }
-
 
 
         // GET: Product/Delete/5
@@ -169,7 +168,6 @@ namespace ABCRetailWebApp.Controllers
         }
 
         // POST: Product/Delete/5
-        // POST: Product/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string partitionKey, string rowKey)
@@ -182,6 +180,7 @@ namespace ABCRetailWebApp.Controllers
                     await _blobService.DeleteProductImageAsync(product.ImageUrl);
                 }
                 await _tableService.DeleteProductAsync(partitionKey, rowKey);
+
                 // Queue message for product deletion
                 var productQueueMessage = new QueueMessage
                 {
@@ -193,6 +192,5 @@ namespace ABCRetailWebApp.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
-
     }
 }

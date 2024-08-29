@@ -18,6 +18,8 @@ namespace ABCRetailWebApp.Services
         Task UpdateProductAsync(Product product);
         Task DeleteProductAsync(string partitionKey, string rowKey);
         Task<IEnumerable<Product>> GetAllProductsAsync(); // Add this method
+        Task<Product> GetProductByRowKeyAsync(string rowKey);
+
 
         // Customer methods
         Task<Customer> GetCustomerAsync(string partitionKey, string rowKey);

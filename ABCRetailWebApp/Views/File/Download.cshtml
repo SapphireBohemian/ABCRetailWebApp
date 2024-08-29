@@ -4,14 +4,16 @@
     ViewData["Title"] = "Download File";
 }
 
-<h1>Download File</h1>
+<div class="container">
+    <h1 class="mb-4">Download File</h1>
 
-<p>Are you sure you want to download the file "<strong>@Model.FileName</strong>"?</p>
+    <p>Are you sure you want to download the file "<strong>@Model.FileName</strong>"?</p>
 
-<form asp-action="Download" method="get">
-    <input type="hidden" name="directoryName" value="@ViewData["DirectoryName"]" />
-    <input type="hidden" name="fileName" value="@Model.FileName" />
-    <button type="submit" class="btn btn-primary">Download</button>
-</form>
+    <form asp-action="Download" method="get">
+        <input type="hidden" name="directoryName" value="@ViewData["DirectoryName"]" />
+        <input type="hidden" name="fileName" value="@Model.FileName" />
+        <button type="submit" class="btn btn-primary">Download</button>
+    </form>
 
-<a asp-action="List" asp-route-directoryName="@ViewData["DirectoryName"]" class="btn btn-secondary">Back to File List</a>
+    <a asp-action="List" asp-route-directoryName="@ViewData["DirectoryName"]" class="btn btn-secondary mt-3">Back to File List</a>
+</div>

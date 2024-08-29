@@ -4,27 +4,21 @@
     ViewData["Title"] = "Customer Details";
 }
 
-<h1>Customer Details</h1>
+<div class="container mt-4">
+    <h1 class="mb-4">Customer Details</h1>
 
-<div>
-    <h4>@Model.Name</h4>
-    <dl class="row">
-        <dt class="col-sm-2">
-            Email
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Email
-        </dd>
-        <dt class="col-sm-2">
-            Phone
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Address
-        </dd>
-    </dl>
-    <p>
-        <a asp-action="Edit" asp-route-partitionKey="@Model.PartitionKey" asp-route-rowKey="@Model.RowKey" class="btn btn-primary">Edit</a>
-        <a asp-action="Delete" asp-route-partitionKey="@Model.PartitionKey" asp-route-rowKey="@Model.RowKey" class="btn btn-danger">Delete</a>
-        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-    </p>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">@Model.Name</h5>
+            <dl class="row">
+                <dt class="col-sm-3">Email</dt>
+                <dd class="col-sm-9">@Model.Email</dd>
+                <dt class="col-sm-3">Address</dt>
+                <dd class="col-sm-9">@Model.Address</dd>
+            </dl>
+            <a asp-action="Edit" asp-route-partitionKey="@Model.PartitionKey" asp-route-rowKey="@Model.RowKey" class="btn btn-primary">Edit</a>
+            <a asp-action="Delete" asp-route-partitionKey="@Model.PartitionKey" asp-route-rowKey="@Model.RowKey" class="btn btn-danger">Delete</a>
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </div>
+    </div>
 </div>
