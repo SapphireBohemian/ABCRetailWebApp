@@ -45,17 +45,26 @@ namespace ABCRetailWebApp.Controllers
             return View();
         }
 
-        // GET: File/Download/{directoryName}/{fileName}
+        // FileController.cs
         public async Task<IActionResult> Download(string directoryName, string fileName)
         {
+            if (string.IsNullOrWhiteSpace(directoryName) || string.IsNullOrWhiteSpace(fileName))
+            {
+                return NotFound("Invalid directory or file name.");
+            }
+
             var fileStream = await _fileService.DownloadFileAsync(directoryName, fileName);
             if (fileStream == null)
             {
-                return NotFound();
+                return NotFound($"File '{fileName}' does not exist in directory '{directoryName}'.");
             }
 
             return File(fileStream, "application/octet-stream", fileName);
         }
+
+
+
+
 
         // GET: File/List
         public async Task<IActionResult> List(string directoryName)
@@ -76,6 +85,30 @@ namespace ABCRetailWebApp.Controllers
             }
         }
 
+        // FileController.cs
+        public async Task<IActionResult> Delete(string directoryName, string fileName)
+        {
+            if (string.IsNullOrWhiteSpace(directoryName) || string.IsNullOrWhiteSpace(fileName))
+            {
+                return NotFound("Invalid directory or file name.");
+            }
+
+            try
+            {
+                await _fileService.DeleteFileAsync(directoryName, fileName);
+                return RedirectToAction("List", new { directoryName = directoryName });
+            }
+            catch (FileNotFoundException ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
 
     }
 }

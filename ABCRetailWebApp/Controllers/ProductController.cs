@@ -1,5 +1,6 @@
 ﻿using ABCRetailWebApp.Models;
 using ABCRetailWebApp.Services;
+using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -115,7 +116,7 @@ namespace ABCRetailWebApp.Controllers
                 return BadRequest();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 // Only delete the old image if a new image is uploaded and the old ImageUrl is not null or empty
                 if (newImageFile != null && newImageFile.Length > 0)
@@ -191,6 +192,23 @@ namespace ABCRetailWebApp.Controllers
                 await _queueService.AddMessageAsync("your-queue-name", productQueueMessage);
             }
             return RedirectToAction(nameof(Index));
+        }
+
+        // GET: Product/ProductImageGallery
+        public async Task<IActionResult> ProductImageGallery()
+        {
+            var productImages = new List<string>();
+
+            var blobServiceClient = new BlobServiceClient("DefaultEndpointsProtocol=https;AccountName=azurestorage420;AccountKey=NGbalqfmF7D5nD5ylimKpoEwwI0I1GPK4DRSs1PHijwMKDd2MR1YWA3Tt+UDHP6blv1U5mlv3Zq9+ASt4+hFPg==;EndpointSuffix=core.windows.net");
+            var blobContainerClient = blobServiceClient.GetBlobContainerClient("product-images");
+
+            await foreach (var blobItem in blobContainerClient.GetBlobsAsync())
+            {
+                var blobClient = blobContainerClient.GetBlobClient(blobItem.Name);
+                productImages.Add(blobClient.Uri.ToString());
+            }
+
+            return View(productImages);
         }
     }
 }

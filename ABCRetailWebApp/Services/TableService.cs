@@ -164,8 +164,27 @@ namespace ABCRetailWebApp.Services
         public async Task UpdateCustomerAsync(Customer customer)
         {
             var tableClient = GetTableClient("customers");
-            await tableClient.UpdateEntityAsync(customer, customer.ETag, TableUpdateMode.Replace);
+
+            // Retrieve the existing customer to get its ETag
+            var existingCustomerResponse = await tableClient.GetEntityAsync<Customer>(customer.PartitionKey, customer.RowKey);
+
+            if (existingCustomerResponse.HasValue)
+            {
+                // Ensure the customer has a valid ETag before updating
+                var existingCustomer = existingCustomerResponse.Value;
+
+                // Set the ETag of the existing customer to the one being updated
+                customer.ETag = existingCustomer.ETag;
+
+                // Perform the update operation
+                await tableClient.UpdateEntityAsync(customer, customer.ETag, TableUpdateMode.Replace);
+            }
+            else
+            {
+                throw new ArgumentException("Customer not found for update.");
+            }
         }
+
 
         public async Task DeleteCustomerAsync(string partitionKey, string rowKey)
         {

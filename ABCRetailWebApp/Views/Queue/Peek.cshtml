@@ -29,11 +29,7 @@
                                     <input type="hidden" name="popReceipt" value="@message.PopReceipt" />
                                     <button type="submit" class="btn btn-warning btn-sm">Dequeue</button>
                                 </form>
-                                <form asp-action="Delete" method="post" class="d-inline ml-2">
-                                    <input type="hidden" name="messageId" value="@message.MessageId" />
-                                    <input type="hidden" name="popReceipt" value="@message.PopReceipt" />
-                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                </form>
+                                
                             </div>
                         </td>
                     </tr>

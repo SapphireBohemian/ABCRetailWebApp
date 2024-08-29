@@ -24,8 +24,8 @@
                 <tr>
                     <td>@file.FileName</td>
                     <td>
-                        <a asp-action="Download" asp-route-fileName="@file.FileName" class="btn btn-info btn-sm">Download</a>
-                        <a asp-action="Delete" asp-route-fileName="@file.FileName" class="btn btn-danger btn-sm">Delete</a>
+                        <a asp-action="Download" asp-route-directoryName="files" asp-route-fileName="@file.FileName" class="btn btn-info btn-sm">Download</a>
+                        <a asp-action="Delete" asp-route-directoryName="files" asp-route-fileName="@file.FileName" class="btn btn-danger btn-sm">Delete</a>
                     </td>
                 </tr>
             }

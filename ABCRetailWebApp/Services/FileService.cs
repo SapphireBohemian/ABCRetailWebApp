@@ -1,5 +1,6 @@
 ﻿using Azure;
 using Azure.Storage.Files.Shares;
+using Azure.Storage.Files.Shares.Models;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -53,10 +54,30 @@ namespace ABCRetailWebApp.Services
 
         public async Task<Stream> DownloadFileAsync(string directoryName, string fileName)
         {
-            var fileClient = GetDirectoryClient("files", directoryName).GetFileClient(fileName);
-            var response = await fileClient.DownloadAsync();
-            return response.Value.Content;
+            var directoryClient = GetDirectoryClient("files", directoryName);
+
+            // Ensure the directory exists
+            if (!await directoryClient.ExistsAsync())
+            {
+                throw new FileNotFoundException($"Directory '{directoryName}' does not exist.");
+            }
+
+            var fileClient = directoryClient.GetFileClient(fileName);
+
+            // Ensure the file exists
+            if (!await fileClient.ExistsAsync())
+            {
+                throw new FileNotFoundException($"File '{fileName}' does not exist in directory '{directoryName}'.");
+            }
+
+            ShareFileDownloadInfo download = await fileClient.DownloadAsync();
+            var memoryStream = new MemoryStream();
+            await download.Content.CopyToAsync(memoryStream);
+            memoryStream.Position = 0; // Reset the stream position for reading
+
+            return memoryStream;
         }
+
 
         public async Task DeleteFileAsync(string directoryName, string fileName)
         {

@@ -91,19 +91,44 @@ namespace ABCRetailWebApp.Controllers
 
             try
             {
+                // Download the blob
                 var stream = await _blobService.DownloadBlobAsync(blobName, containerName);
 
-                var fileExtension = Path.GetExtension(blobName).ToLowerInvariant();
-                var provider = new FileExtensionContentTypeProvider();
-                provider.TryGetContentType(fileExtension, out var contentType);
+                if (stream == null)
+                {
+                    return NotFound();
+                }
 
-                return File(stream, contentType ?? "application/octet-stream");
+                // Determine content type based on the blob name or extension
+                var contentType = GetContentType(blobName);
+
+                return File(stream, contentType);
             }
             catch (Exception)
             {
                 return NotFound();
             }
         }
+
+        // Helper method to determine content type based on file extension
+        private string GetContentType(string fileName)
+        {
+            var ext = Path.GetExtension(fileName).ToLowerInvariant();
+            return ext switch
+            {
+                ".jpg" => "image/jpeg",
+                ".jpeg" => "image/jpeg",
+                ".png" => "image/png",
+                ".gif" => "image/gif",
+                ".bmp" => "image/bmp",
+                ".webp" => "image/webp",
+                ".mp4" => "video/mp4",
+                ".webm" => "video/webm",
+                ".avi" => "video/x-msvideo",
+                _ => "application/octet-stream", // Default to binary if unknown
+            };
+        }
+
 
         public async Task<IActionResult> GetProductImage(string rowKey)
         {

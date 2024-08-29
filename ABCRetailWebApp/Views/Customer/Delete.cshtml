@@ -19,7 +19,7 @@
                 <dd class="col-sm-9">@Model.Address</dd>
             </dl>
         </div>
-        <form asp-action="DeleteConfirmed" method="post">
+        <form asp-action="Delete" method="post">
             <input type="hidden" asp-for="PartitionKey" />
             <input type="hidden" asp-for="RowKey" />
             <button type="submit" class="btn btn-danger">Delete</button>

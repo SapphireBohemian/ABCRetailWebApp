@@ -17,10 +17,9 @@
                 {
                     <div class="col-md-4 mb-4">
                         <div class="thumbnail card">
-                            <img src="@Url.Action("GetImage", "Blob", new { blobName = blob.BlobName, containerName = containerName })"
+                            <img src="@Url.Action("GetImage", "Blob", new { blobName = blob.BlobName, containerName = blob.ContainerName })"
                                  alt="@blob.BlobName"
-                                 class="card-img-top"
-                                 onerror="this.src='@Url.Content("~/images/placeholder.png")';" />
+                                 class="card-img-top";" />
                             <div class="card-body">
                                 <h5 class="card-title">@blob.BlobName</h5>
                                 <p class="card-text">Uploaded on: @blob.UploadDate.ToString("g")</p>

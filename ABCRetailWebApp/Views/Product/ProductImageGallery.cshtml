@@ -1,0 +1,32 @@
+﻿@model IEnumerable<string>
+
+@{
+    ViewData["Title"] = "Product Image Gallery";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4 text-center">Product Image Gallery</h1>
+
+    <div class="row">
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var imageUrl in Model)
+            {
+                var imageName = System.IO.Path.GetFileName(imageUrl); // Extract the image name from the URL
+
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="@imageUrl" class="card-img-top" alt="Product Image" style="max-height: 200px; object-fit: cover;">
+                        <div class="card-body">
+                            <p class="card-text">@imageName</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p class="text-center">No images found.</p>
+        }
+    </div>
+</div>
