@@ -29,7 +29,7 @@ namespace ABCRetailWebApp.Controllers
             {
                 if (model.File != null && model.File.Length > 0)
                 {
-                    Console.WriteLine("File uploaded: " + model.File.FileName); // Add this line
+                    Console.WriteLine("File uploaded: " + model.File.FileName); 
                     await _fileService.UploadFileAsync(model.File, model.DirectoryName, model.File.FileName);
                     return RedirectToAction("List", new { directoryName = model.DirectoryName });
                 }

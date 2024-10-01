@@ -10,14 +10,14 @@ namespace ABCRetailWebApp.Services
         Task AddOrderAsync(Order order);
         Task UpdateOrderAsync(Order order);
         Task DeleteOrderAsync(string partitionKey, string rowKey);
-        Task<IEnumerable<Order>> GetAllOrdersAsync(); // Add this method
+        Task<IEnumerable<Order>> GetAllOrdersAsync(); 
 
         // Product methods
         Task<Product> GetProductAsync(string partitionKey, string rowKey);
         Task AddProductAsync(Product product);
         Task UpdateProductAsync(Product product);
         Task DeleteProductAsync(string partitionKey, string rowKey);
-        Task<IEnumerable<Product>> GetAllProductsAsync(); // Add this method
+        Task<IEnumerable<Product>> GetAllProductsAsync(); 
         Task<Product> GetProductByRowKeyAsync(string rowKey);
 
 
@@ -26,6 +26,6 @@ namespace ABCRetailWebApp.Services
         Task AddCustomerAsync(Customer customer);
         Task UpdateCustomerAsync(Customer customer);
         Task DeleteCustomerAsync(string partitionKey, string rowKey);
-        Task<IEnumerable<Customer>> GetAllCustomersAsync(); // Add this method
+        Task<IEnumerable<Customer>> GetAllCustomersAsync(); 
     }
 }

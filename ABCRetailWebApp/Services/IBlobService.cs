@@ -14,7 +14,7 @@ namespace ABCRetailWebApp.Services
         Task<Stream> DownloadProductImageAsync(string imageUrl);
         Task DeleteProductImageAsync(string imageUrl);
         //Task<IEnumerable<string>> ListBlobsAsync(string containerName);
-        Task<IEnumerable<BlobModel>> ListBlobsAsync(string containerName); // Update this line
+        Task<IEnumerable<BlobModel>> ListBlobsAsync(string containerName); 
 
     }
 }

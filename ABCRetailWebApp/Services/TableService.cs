@@ -28,8 +28,8 @@ namespace ABCRetailWebApp.Services
 
         public async Task<Product> GetProductByRowKeyAsync(string rowKey)
         {
-            var tableClient = _tableServiceClient.GetTableClient("Products"); // Assuming table name is "Products"
-            var response = await tableClient.GetEntityAsync<Product>("PartitionKey", rowKey); // Use actual partition key
+            var tableClient = _tableServiceClient.GetTableClient("Products"); 
+            var response = await tableClient.GetEntityAsync<Product>("PartitionKey", rowKey); 
             return response.Value;
         }
 

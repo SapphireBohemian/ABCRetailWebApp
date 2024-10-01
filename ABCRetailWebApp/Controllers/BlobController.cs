@@ -63,7 +63,7 @@ namespace ABCRetailWebApp.Controllers
             {
                 return RedirectToAction("MediaContent");
             }
-            return RedirectToAction("Index"); // or another appropriate action
+            return RedirectToAction("Index"); 
         }
 
 

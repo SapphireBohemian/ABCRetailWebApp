@@ -39,7 +39,7 @@ namespace ABCRetailWebApp.Services
         public async Task<QueueMessageModel> GetMessageByIdAsync(string queueName, string messageId)
         {
             var queueClient = GetQueueClient(queueName);
-            var messages = await queueClient.ReceiveMessagesAsync(maxMessages: 32); // Adjust as needed
+            var messages = await queueClient.ReceiveMessagesAsync(maxMessages: 32); 
 
             var message = messages.Value.FirstOrDefault(m => m.MessageId == messageId);
             if (message != null)

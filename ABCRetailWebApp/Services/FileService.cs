@@ -92,7 +92,7 @@ namespace ABCRetailWebApp.Services
             var directoryExists = await directoryClient.ExistsAsync();
             if (!directoryExists)
             {
-                // Log the issue and throw a FileNotFoundException
+                
                 Console.WriteLine($"Directory not found: {directoryName}");
                 throw new FileNotFoundException("The specified directory does not exist.", directoryName);
             }

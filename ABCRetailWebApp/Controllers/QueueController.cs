@@ -2,7 +2,7 @@
 using ABCRetailWebApp.Models;
 using ABCRetailWebApp.Services;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging; // Ensure you have this import
+using Microsoft.Extensions.Logging; 
 
 namespace ABCRetailWebApp.Controllers
 {
@@ -26,17 +26,17 @@ namespace ABCRetailWebApp.Controllers
         // GET: Queue/Peek
         public async Task<IActionResult> Peek()
         {
-            var queueName = "your-queue-name"; // Replace with your actual queue name
+            var queueName = "your-queue-name"; 
             var messages = await _queueService.PeekMessagesAsync(queueName, 20); // Adjust the number of messages as needed
             return View(messages);
         }
 
-        // POST: Queue/Dequeue
+        
         // POST: Queue/Dequeue
         [HttpPost]
         public async Task<IActionResult> Dequeue()
         {
-            var queueName = "your-queue-name"; // Replace with your actual queue name
+            var queueName = "your-queue-name"; 
             var dequeuedMessage = await _queueService.DequeueMessageAsync(queueName);
 
             if (dequeuedMessage == null)
@@ -60,7 +60,7 @@ namespace ABCRetailWebApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var queueName = "your-queue-name"; // Replace with your actual queue name
+                var queueName = "your-queue-name"; 
                 await _queueService.AddMessageAsync(queueName, message);
                 return RedirectToAction("Peek");
             }
@@ -76,7 +76,7 @@ namespace ABCRetailWebApp.Controllers
                 return BadRequest("Invalid messageId or popReceipt.");
             }
 
-            var queueName = "your-queue-name"; // Replace with your actual queue name
+            var queueName = "your-queue-name"; 
             await _queueService.DeleteMessageAsync(queueName, messageId, popReceipt);
             return RedirectToAction("Peek");
         }
