@@ -7,21 +7,21 @@
 <div class="container mt-4">
     <h1 class="mb-4">@Model.Name</h1>
 
-    <div class="mb-3">
+    <div class="mb-4">
         <h4>Description</h4>
         <p>@Model.Description</p>
     </div>
 
-    <div class="mb-3">
+    <div class="mb-4">
         <h4>Price</h4>
-        <p>@Model.Price.ToString("C")</p>
+        <p class="fw-bold">@Model.Price.ToString("C")</p>
     </div>
 
-    <div class="mb-3">
+    <div class="mb-4">
         <h4>Image</h4>
         @if (!string.IsNullOrEmpty(Model.ImageUrl))
         {
-            <img src="@Model.ImageUrl" alt="Product Image" style="max-height: 300px;" />
+            <img src="@Model.ImageUrl" alt="Product Image" class="img-fluid" style="max-height: 300px;" />
         }
         else
         {

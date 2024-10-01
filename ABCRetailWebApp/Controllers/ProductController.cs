@@ -12,12 +12,14 @@ namespace ABCRetailWebApp.Controllers
         private readonly ITableService _tableService;
         private readonly IBlobService _blobService;
         private readonly IQueueService _queueService;
+        private readonly IEmailService _emailService;
 
-        public ProductController(ITableService tableService, IBlobService blobService, IQueueService queueService)
+        public ProductController(ITableService tableService, IBlobService blobService, IQueueService queueService, IEmailService emailService)
         {
             _tableService = tableService;
             _blobService = blobService;
             _queueService = queueService;
+            _emailService = emailService;
         }
 
         // GET: Product/Index
@@ -89,6 +91,8 @@ namespace ABCRetailWebApp.Controllers
                     Timestamp = DateTimeOffset.Now
                 };
                 await _queueService.AddMessageAsync("your-queue-name", productQueueMessage);
+
+
 
                 return RedirectToAction(nameof(Details), new { partitionKey = product.PartitionKey, rowKey = product.RowKey });
             }

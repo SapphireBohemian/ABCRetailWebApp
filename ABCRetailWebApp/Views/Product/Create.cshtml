@@ -16,19 +16,19 @@
 
         <div class="mb-3">
             <label asp-for="Description" class="form-label">Description</label>
-            <textarea asp-for="Description" class="form-control"></textarea>
+            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
             <span asp-validation-for="Description" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
             <label asp-for="Price" class="form-label">Price</label>
-            <input asp-for="Price" class="form-control" />
+            <input asp-for="Price" class="form-control" type="number" step="0.01" />
             <span asp-validation-for="Price" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
-            <label for="imageFile">Product Image</label>
-            <input type="file" name="imageFile" id="imageFile" class="form-control" />
+            <label for="imageFile" class="form-label">Product Image</label>
+            <input type="file" name="imageFile" id="imageFile" class="form-control" accept="image/*" />
         </div>
 
         <div class="mb-3">

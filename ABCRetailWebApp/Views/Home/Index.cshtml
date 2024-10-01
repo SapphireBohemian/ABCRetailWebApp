@@ -1,11 +1,63 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
-
-<div class="home-page text-center">
+﻿<div class="home-page text-center bg-light py-5">
     <div class="container">
-        <h1 class="display-3 mb-4">Welcome to ABCRetail</h1>
-        <p class="lead mb-4">Your one-stop shop for the best products and deals.</p>
-        <a href="@Url.Action("Index", "Product")" class="btn btn-primary btn-lg mt-4">View Products</a>
+        <h1 class="display-3 mb-4">Welcome to ABC Retail</h1>
+        <p class="lead mb-4">Your trusted partner for exceptional products and seamless shopping experiences.</p>
+        <a href="@Url.Action("Index", "Product")" class="btn btn-primary btn-lg mt-4">Browse Our Products</a>
+
+        <!-- Carousel -->
+        <div id="carouselExample" class="carousel slide my-4" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="/images/retail1.webp" class="d-block w-100" alt="Image of Retail Product 1">
+                </div>
+                <div class="carousel-item">
+                    <img src="/images/retail2.png" class="d-block w-100" alt="Image of Retail Product 2">
+                </div>
+                <div class="carousel-item">
+                    <img src="/images/retail3.jpg" class="d-block w-100" alt="Image of Retail Product 3">
+                </div>
+                <div class="carousel-item">
+                    <img src="/images/RetailProd1.jpg" class="d-block w-100" alt="Image of Retail Product 4">
+                </div>
+                <div class="carousel-item">
+                    <img src="/images/RetailProd17.jpg" class="d-block w-100" alt="Image of Retail Product 5">
+                </div>
+                <div class="carousel-item">
+                    <img src="/images/RetailProd5.jpg" class="d-block w-100" alt="Image of Retail Product 6">
+                </div>
+                <div class="carousel-item">
+                    <img src="/images/RetailProd15.jpg" class="d-block w-100" alt="Image of Retail Product 7">
+                </div>
+                <div class="carousel-item">
+                    <img src="/images/RetailProd10.jpg" class="d-block w-100" alt="Image of Retail Product 8">
+                </div>
+                <div class="carousel-item">
+                    <img src="/images/RetailProd12.jpg" class="d-block w-100" alt="Image of Retail Product 9">
+                </div>
+                <div class="carousel-item">
+                    <img src="/images/RetailProd20.jpg" class="d-block w-100" alt="Image of Retail Product 10">
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+
+        <div class="mt-4">
+            <h2 class="mb-3">Why Choose ABC Retail?</h2>
+            <p class="mb-4">At ABC Retail, we prioritize efficiency and customer satisfaction. Despite our rapid growth, we continuously strive to improve our operations and infrastructure to enhance your shopping experience.</p>
+            <ul class="list-unstyled">
+                <li><strong>Modern Infrastructure:</strong> Transitioning to scalable cloud solutions for faster order processing.</li>
+                <li><strong>Real-Time Analytics:</strong> Utilizing advanced data analytics to personalize your experience.</li>
+                <li><strong>Quality Products:</strong> A carefully curated selection of products that meet your needs.</li>
+            </ul>
+            <a href="@Url.Action("Index", "Product")" class="btn btn-secondary btn-lg">Explore Our Collections</a>
+        </div>
+
     </div>
 </div>

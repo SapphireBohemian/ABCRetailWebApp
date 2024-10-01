@@ -4,42 +4,39 @@
     ViewData["Title"] = "Edit Product";
 }
 
-<h1>Edit Product</h1>
+<div class="container mt-4">
+    <h1>Edit Product</h1>
 
-<form asp-action="Edit" enctype="multipart/form-data" method="post">
-    <input type="hidden" asp-for="PartitionKey" />
-    <input type="hidden" asp-for="RowKey" />
+    <form asp-action="Edit" enctype="multipart/form-data" method="post">
+        <input type="hidden" asp-for="PartitionKey" />
+        <input type="hidden" asp-for="RowKey" />
 
-    <div class="form-group">
-        <label asp-for="Name" class="control-label"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
-    </div>
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label">Name</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
 
-    <div class="form-group">
-        <label asp-for="Description" class="control-label"></label>
-        <textarea asp-for="Description" class="form-control" rows="4"></textarea>
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label">Description</label>
+            <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
 
-    <div class="form-group">
-        <label asp-for="Price" class="control-label"></label>
-        <input asp-for="Price" class="form-control" />
-        <span asp-validation-for="Price" class="text-danger"></span>
-    </div>
+        <div class="mb-3">
+            <label asp-for="Price" class="form-label">Price</label>
+            <input asp-for="Price" class="form-control" type="number" step="0.01" />
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
 
-    <div class="form-group">
-        <label for="newImageFile">Update Product Image (optional)</label>
-        <input type="file" name="newImageFile" id="newImageFile" class="form-control" />
-        <br />
-    </div>
+        <div class="mb-3">
+            <label for="newImageFile">Update Product Image (optional)</label>
+            <input type="file" name="newImageFile" id="newImageFile" class="form-control" />
+        </div>
 
-    <div class="form-group">
-        <input type="submit" value="Save Changes" class="btn btn-primary" />
-        <a asp-action="Details" asp-route-partitionKey="@Model.PartitionKey" asp-route-rowKey="@Model.RowKey" class="btn btn-secondary">Back to Details</a>
-    </div>
-</form>
-
-<div>
-    
+        <div class="mb-3">
+            <input type="submit" value="Save Changes" class="btn btn-primary" />
+            <a asp-action="Details" asp-route-partitionKey="@Model.PartitionKey" asp-route-rowKey="@Model.RowKey" class="btn btn-secondary">Back to Details</a>
+        </div>
+    </form>
 </div>

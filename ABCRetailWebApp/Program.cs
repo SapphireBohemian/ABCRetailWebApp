@@ -5,7 +5,7 @@ using Azure.Storage.Files.Shares;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ABCRetailWebApp.Services; // Ensure this namespace is correct for your services
+using ABCRetailWebApp.Services; 
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,10 +25,11 @@ builder.Services.AddSingleton(new QueueServiceClient(queueConnectionString));
 builder.Services.AddSingleton(new ShareServiceClient(fileConnectionString));
 
 // Register application services
-builder.Services.AddScoped<ITableService, TableService>(); // Assuming you have TableService class implementing ITableService
-builder.Services.AddScoped<IBlobService, BlobService>(); // Assuming you have BlobService class implementing IBlobService
-builder.Services.AddScoped<IQueueService, QueueService>(); // Assuming you have QueueService class implementing IQueueService
-builder.Services.AddScoped<IFileService, FileService>(); // Assuming you have FileService class implementing IFileService
+builder.Services.AddScoped<ITableService, TableService>(); 
+builder.Services.AddScoped<IBlobService, BlobService>(); 
+builder.Services.AddScoped<IQueueService, QueueService>(); 
+builder.Services.AddScoped<IFileService, FileService>(); 
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 var app = builder.Build();
 

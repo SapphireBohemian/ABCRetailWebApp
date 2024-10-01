@@ -4,10 +4,10 @@
     ViewData["Title"] = "Customer Details";
 }
 
-<div class="container mt-4">
+<div class="container mt-5">
     <h1 class="mb-4">Customer Details</h1>
 
-    <div class="card">
+    <div class="card shadow-sm">
         <div class="card-body">
             <h5 class="card-title">@Model.Name</h5>
             <dl class="row">
@@ -16,9 +16,39 @@
                 <dt class="col-sm-3">Address</dt>
                 <dd class="col-sm-9">@Model.Address</dd>
             </dl>
-            <a asp-action="Edit" asp-route-partitionKey="@Model.PartitionKey" asp-route-rowKey="@Model.RowKey" class="btn btn-primary">Edit</a>
-            <a asp-action="Delete" asp-route-partitionKey="@Model.PartitionKey" asp-route-rowKey="@Model.RowKey" class="btn btn-danger">Delete</a>
-            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            <div class="text-center">
+                <a asp-action="Edit" asp-route-partitionKey="@Model.PartitionKey" asp-route-rowKey="@Model.RowKey" class="btn btn-primary me-2">Edit</a>
+                <a asp-action="Delete" asp-route-partitionKey="@Model.PartitionKey" asp-route-rowKey="@Model.RowKey" class="btn btn-danger me-2">Delete</a>
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
         </div>
     </div>
 </div>
+
+
+
+@{
+    if (TempData["EmailSent"] != null)
+    {
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="emailToast" class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        @TempData["EmailSent"]
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var emailToastEl = document.getElementById('emailToast');
+        if (emailToastEl) {
+            var toast = new bootstrap.Toast(emailToastEl);
+            toast.show();
+        }
+    });
+</script>

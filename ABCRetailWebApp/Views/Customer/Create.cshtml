@@ -4,7 +4,7 @@
     ViewData["Title"] = "Create Customer";
 }
 
-<div class="container mt-4">
+<div class="container mt-5">
     <h1 class="mb-4">Create New Customer</h1>
 
     <form asp-action="Create" method="post">
@@ -23,9 +23,42 @@
             <input asp-for="Address" class="form-control" />
             <span asp-validation-for="Address" class="text-danger"></span>
         </div>
-        <div class="mb-3">
-            <input type="submit" value="Create" class="btn btn-primary" />
-            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        <div class="mb-3 text-center">
+            <input type="submit" value="Create" class="btn btn-success btn-lg" />
+            <a asp-action="Index" class="btn btn-secondary btn-lg">Back to List</a>
         </div>
     </form>
 </div>
+
+
+
+@{
+    if (TempData["EmailSent"] != null)
+    {
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="emailToast" class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        @TempData["EmailSent"]
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var emailToastEl = document.getElementById('emailToast');
+        if (emailToastEl) {
+            var toast = new bootstrap.Toast(emailToastEl);
+            toast.show();
+        }
+    });
+</script>
+
+
+
+
+

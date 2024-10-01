@@ -10,12 +10,12 @@
     <div class="row">
         @if (Model != null && Model.Any())
         {
-            @foreach (var imageUrl in Model)
+            foreach (var imageUrl in Model)
             {
-                var imageName = System.IO.Path.GetFileName(imageUrl); // Extract the image name from the URL
+                var imageName = System.IO.Path.GetFileName(imageUrl);
 
-                <div class="col-md-4 mb-4">
-                    <div class="card">
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                    <div class="card shadow-sm">
                         <img src="@imageUrl" class="card-img-top" alt="Product Image" style="max-height: 200px; object-fit: cover;">
                         <div class="card-body">
                             <p class="card-text">@imageName</p>

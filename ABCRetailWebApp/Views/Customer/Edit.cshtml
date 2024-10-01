@@ -4,17 +4,17 @@
     ViewData["Title"] = "Edit Customer";
 }
 
-<div class="container mt-4">
+<div class="container mt-5">
     <h1 class="mb-4">Edit Customer</h1>
 
-    <form asp-action="Edit">
+    <form asp-action="Edit" method="post">
         <div class="mb-3">
-            <label asp-for="PartitionKey" class="form-label"></label>
+            <label asp-for="PartitionKey" class="form-label">Partition Key</label>
             <input asp-for="PartitionKey" class="form-control" readonly />
             <span asp-validation-for="PartitionKey" class="text-danger"></span>
         </div>
         <div class="mb-3">
-            <label asp-for="RowKey" class="form-label"></label>
+            <label asp-for="RowKey" class="form-label">Row Key</label>
             <input asp-for="RowKey" class="form-control" readonly />
             <span asp-validation-for="RowKey" class="text-danger"></span>
         </div>
@@ -33,11 +33,37 @@
             <input asp-for="Address" class="form-control" />
             <span asp-validation-for="Address" class="text-danger"></span>
         </div>
-        <div class="mb-3">
-            <input type="submit" value="Save Changes" class="btn btn-primary" />
-            <a asp-action="Details" asp-route-partitionKey="@Model.PartitionKey" asp-route-rowKey="@Model.RowKey" class="btn btn-secondary">Back to Details</a>
+        <div class="mb-3 text-center">
+            <input type="submit" value="Save Changes" class="btn btn-primary btn-lg" />
+            <a asp-action="Index" class="btn btn-secondary btn-lg">Back to List</a>
         </div>
     </form>
-
-   
 </div>
+
+
+
+@{
+    if (TempData["EmailSent"] != null)
+    {
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="emailToast" class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        @TempData["EmailSent"]
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var emailToastEl = document.getElementById('emailToast');
+        if (emailToastEl) {
+            var toast = new bootstrap.Toast(emailToastEl);
+            toast.show();
+        }
+    });
+</script>
